@@ -122,11 +122,7 @@ def main():
         if keys[pygame.K_DOWN]:
             mycell.move([0, 1])
 
-<<<<<<< HEAD
         # players, pallets, viruses = eattime([*players, *pallets, *viruses])
-=======
-        players, pallets, viruses = eattime([*players, *pallets, *viruses])
->>>>>>> 976cebfd8bbd56161529a8eee137f7edaf5bbab5
         draw_window(win, board, [*players, *pallets, *viruses])
 
 
@@ -136,11 +132,7 @@ def eattime(cells):
     for i in range(n):
         for j in range(i, n):
             if i != j:
-<<<<<<< HEAD
                 if np.linalg.norm(cells[i].position - cells[j].position) < 2:
-=======
-                if np.linalg.norm(cells[i].position - cells[j].position):
->>>>>>> 976cebfd8bbd56161529a8eee137f7edaf5bbab5
                     if cells[i].RADIUS > cells[j].RADIUS:
                         cells[i].eat(cells[j])
                         cells.append(cells[i])
@@ -159,11 +151,7 @@ def eattime(cells):
             _viruses.append(i)
         elif i.type == "Pallet":
             _pallets.append(i)
-<<<<<<< HEAD
     return [_players, _pallets, _viruses]
-=======
-    return _players, _pallets, _viruses
->>>>>>> 976cebfd8bbd56161529a8eee137f7edaf5bbab5
 
 
 if __name__ == "__main__":
