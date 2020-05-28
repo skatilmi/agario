@@ -35,9 +35,6 @@ class Cell:
     VEL = 0.01
 
     def __init__(self):
-        self.x = random.random()
-        self.y = random.random()
-
         self.position = np.random.random(2)
         self.col = np.random.randint(0, 256, 3)
         self.rad = 1
@@ -57,7 +54,7 @@ class Cell:
         self.position = self.position + np.array(translation) * self.VEL
 
     def eat(self, other):
-        self.RADIUS = np.sqrt(self.RADIUS ** 2 + other.RADIUS ** 2)
+        self.rad = np.sqrt(self.rad ** 2 + other.rad ** 2)
 
 
 class Pellet(Cell):
@@ -88,6 +85,20 @@ def draw_window(win, board, cells):
     pygame.display.update()
 
 
+def eattime(players, pallets, viruses):
+    _players, _pallets, _viruses = [], [], []
+    for p in range(len(players)):
+        for pal in range(len(pallets)):
+            abstand = np.linalg.norm(players[p].position - pallets[pal].position)
+            print(abstand)
+            if np.linalg.norm(players[p].position - pallets[pal].position) > 0.01:
+                _pallets.append(pallets[pal])
+            else:
+                players[p].rad += pallets[pal].rad
+
+    return [players, _pallets, viruses]
+
+
 def main():
     global WIN
     win = WIN
@@ -100,7 +111,6 @@ def main():
     players = [mycell]
     pallets = [Pellet()]
     viruses = []
-
     run = True
     while run:
         if random.random() > 0.96 and len(pallets) < MaxPallets:  #
@@ -111,7 +121,6 @@ def main():
                 run = False
                 pygame.quit()
                 break
-
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             mycell.move([-1, 0])
@@ -121,42 +130,9 @@ def main():
             mycell.move([1, 0])
         if keys[pygame.K_DOWN]:
             mycell.move([0, 1])
-        input()
+        players, pallets, viruses = eattime(players, pallets, viruses)
 
-        players, pallets, viruses = eattime([*players, *pallets, *viruses])
         draw_window(win, board, [*players, *pallets, *viruses])
-
-
-def eattime(cells):
-    print(cells)
-    returncells = []
-    n = len(cells)
-    for i in range(n):
-        for j in range(i, n):
-            if i != j:
-                if np.linalg.norm(cells[i].position - cells[j].position) < 2:
-                    if cells[i].RADIUS > cells[j].RADIUS:
-                        cells[i].eat(cells[j])
-                        cells.append(cells[i])
-                    else:
-                        cells[j].eat(cells[i])
-                        cells.append(cells[j])
-
-                else:
-                    returncells.append(cells[i])
-    print(returncells)
-    returncells = list(set(returncells))
-    print(returncells)
-    input()
-    _players, _pallets, _viruses = [], [], []
-    for i in returncells:
-        if i.type == "Player":
-            _players.append(i)
-        elif i.type == "Virus":
-            _viruses.append(i)
-        elif i.type == "Pallet":
-            _pallets.append(i)
-    return [_players, _pallets, _viruses]
 
 
 if __name__ == "__main__":
