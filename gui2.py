@@ -63,7 +63,7 @@ class Cell:
 class Pellet(Cell):
     def __init__(self):
         super().__init__()
-        self.type = "Pallet"
+        self.type = "Pellet"
 
 
 class Virus(Cell):
@@ -98,7 +98,7 @@ def main():
     board = Board()
     mycell = Player()
     players = [mycell]
-    pallets = []
+    pallets = [Pellet()]
     viruses = []
 
     run = True
@@ -121,12 +121,14 @@ def main():
             mycell.move([1, 0])
         if keys[pygame.K_DOWN]:
             mycell.move([0, 1])
+        input()
 
-        # players, pallets, viruses = eattime([*players, *pallets, *viruses])
+        players, pallets, viruses = eattime([*players, *pallets, *viruses])
         draw_window(win, board, [*players, *pallets, *viruses])
 
 
 def eattime(cells):
+    print(cells)
     returncells = []
     n = len(cells)
     for i in range(n):
@@ -142,7 +144,10 @@ def eattime(cells):
 
                 else:
                     returncells.append(cells[i])
+    print(returncells)
     returncells = list(set(returncells))
+    print(returncells)
+    input()
     _players, _pallets, _viruses = [], [], []
     for i in returncells:
         if i.type == "Player":
